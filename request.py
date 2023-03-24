@@ -12,7 +12,7 @@ class Request:
 
     def log(self, response, *args, **kwargs):
         """
-        This is the Actual place where is logging is happening
+        This is the Actual place where logging is happening
         :param response:
         :param args:
         :param kwargs:
