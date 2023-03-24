@@ -13,13 +13,12 @@ class Request:
     def log(self, response, *args, **kwargs):
         req = response.request
 
-        try:
-            data = req.body.decode('utf-8')
-        except AttributeError:
-            if req.body:
-                data = dict(x.split("=") for x in req.body.split("&"))
-            else:
-                data = None
+        data = None
+        if req.body is not None:
+            if isinstance(req.body, bytes):
+                data = req.body.decode('utf-8')
+            elif isinstance(req.body, str):
+                data = dict(x.split("=", -1) for x in req.body.split("&", -1))
 
         attrs = {
             "<method>": req.method,
