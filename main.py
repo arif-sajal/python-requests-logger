@@ -1,11 +1,14 @@
 from request import Request
 import logging
 
+# Formatting the python logger
 logging.basicConfig(format='INFO: %(message)s')
 logging.root.setLevel(logging.INFO)
 
+# Initiating requests client
 req = Request().client()
 
+# Request tests
 req.get("https://jsonplaceholder.typicode.com/posts")
 
 req.post("https://jsonplaceholder.typicode.com/posts")

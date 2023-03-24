@@ -6,20 +6,27 @@ import re
 class Request:
 
     def __init__(self):
-        self.format = '<method> <url> json:<data> response_status_codee:<status_code>'
-        self.request = requests.Session()
-        self.request.hooks["response"] = [self.log]
+        self.format = '<method> <url> json:<data> response_status_codee:<status_code>'  # Format String
+        self.request = requests.Session()  # Getting a requests session
+        self.request.hooks["response"] = [self.log]  # Assigning the response Hook
 
     def log(self, response, *args, **kwargs):
+        """
+        This is the Actual place where is logging is happening
+        :param response:
+        :param args:
+        :param kwargs:
+        :return None:
+        """
         req = response.request
 
+        # Preparing and formatting the json data for post request
         data = None
         if req.body is not None:
             if isinstance(req.body, bytes):
-                data = req.body.decode('utf-8')
-            elif isinstance(req.body, str):
-                data = dict(x.split("=", -1) for x in req.body.split("&", -1))
+                data = req.body.decode('utf-8')  # Raw json Data
 
+        # Assigning All attributes value for the format
         attrs = {
             "<method>": req.method,
             "<status_code>": response.status_code,
@@ -27,10 +34,14 @@ class Request:
             "<data>": data or {}
         }
 
+        # Preparing the attributes
         params = dict((re.escape(k), str(v)) for k, v in attrs.items())
         pattern = re.compile("|".join(params.keys()))
 
+        # Preparing the log format
         log_format = data is None and self.format.replace(' json:<data>', '') or self.format
+
+        # Logging
         logging.info(pattern.sub(lambda m: params[re.escape(m.group(0))], log_format))
 
     def client(self):
