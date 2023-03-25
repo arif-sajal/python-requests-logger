@@ -46,3 +46,8 @@ class Request:
 
     def client(self):
         return self.request
+
+
+def get_hooks():
+    logger = Request().log
+    return {'response': logger}
