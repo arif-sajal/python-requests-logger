@@ -51,3 +51,6 @@ class Request:
 def get_hooks():
     logger = Request().log
     return {'response': logger}
+
+
+hoooks = get_hooks()
