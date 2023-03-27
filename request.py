@@ -1,4 +1,4 @@
-import requests
+import requests as req
 import logging
 import re
 
@@ -7,7 +7,7 @@ class Request:
 
     def __init__(self):
         self.format = '<method> <url> json:<data> response_status_codee:<status_code>'  # Format String
-        self.request = requests.Session()  # Getting a requests session
+        self.request = req.Session()  # Getting a requests session
         self.request.hooks["response"] = [self.log]  # Assigning the response Hook
 
     def log(self, response, *args, **kwargs):
@@ -53,4 +53,9 @@ def get_hooks():
     return {'response': logger}
 
 
-hoooks = get_hooks()
+def get_client():
+    return Request().client()
+
+
+hooks = get_hooks()
+requests = get_client()
